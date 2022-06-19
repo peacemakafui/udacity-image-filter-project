@@ -31,6 +31,7 @@ import {filterImageFromURL, deleteLocalFiles} from './util/util';
     });
   }
     catch(err){
+      console.log(err)
       return res.status(500).send({err: 'Unable to process your request'})
   }
 });
