@@ -17,23 +17,23 @@ import {filterImageFromURL, deleteLocalFiles} from './util/util';
   // GET /filteredimage?image_url={{URL}}
   // endpoint to filter an image from a public url.
   app.get('/filteredimage/',async (req:Request, res: Response)=>{
-   const {image_url} = req.query;
 
-    if(!image_url){
-      return res.status(400).send("image url required");
-    }
-    let imageFile: string;
     try{
-     imageFile = await filterImageFromURL(image_url);
-    }
-    catch(err){
-      console.log(err)
-    }
-    return res.status(200).sendFile(imageFile, ()=>{
-      deleteLocalFiles([imageFile])
+        const {image_url} = req.query;
+
+        if(!image_url){
+          return res.status(400).send("bad request: image url required");
+        }
+        const imageFile = await filterImageFromURL(image_url);
+
+        return res.status(200).sendFile(imageFile, ()=>{
+          deleteLocalFiles([imageFile])
     });
- 
-  });
+  }
+    catch(err){
+      return res.status(500).send({err: 'Unable to process your request'})
+  }
+});
   
   
   // Root Endpoint
